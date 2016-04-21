@@ -6,7 +6,7 @@ describe TransilienRealtime do
   end
 
   describe TransilienRealtime::Base do
-    let(:trb) { TransilienRealtime::Base.new }
+    let(:trb) { described_class.new }
 
     it { expect { trb.next(from: nil) }.to raise_error ArgumentError }
 
@@ -50,7 +50,7 @@ describe TransilienRealtime do
   describe TransilienRealtime::Train do
     context '.from_xml' do
       let(:expected_train) do
-        TransilienRealtime::Train.new(
+        described_class.new(
                                        mission: 'GOCA',
                                        terminus: '87381244',
                                        numero: '137153',
@@ -60,13 +60,13 @@ describe TransilienRealtime do
                                      )
       end
       let(:train_node) { Nokogiri::XML(PSLVAR).xpath('//train').first }
-      subject { TransilienRealtime::Train }  
+      subject { described_class }
       it { expect(subject.from_xml(train_node)).to eq(expected_train) }
     end
 
     context '.to_json' do
       let(:train_node) { Nokogiri::XML(PSLVAR).xpath('//train')[1] }
-      subject { TransilienRealtime::Train }  
+      subject { described_class }
       it { expect(subject.from_xml(train_node).to_json).to eq('{"mission":"MOCA","departure_at":"2015-05-14 20:42:00 +0000","numero":"136955","terminus":"87381509","mode":"realtime","state":"cancelled"}') }
     end
   end
